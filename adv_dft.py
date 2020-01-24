@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from world import World
+from util import Stack
 
 import random
 from ast import literal_eval
@@ -19,7 +20,7 @@ map_file = "maps/test_loop_fork.txt"
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
 world.load_graph(room_graph)
-print(room_graph)
+# print(f"room graph / {room_graph}")
 
 # Print an ASCII map
 world.print_rooms()
@@ -29,6 +30,8 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+
+
 
 # ---------------------------------------------------
             # DFT Procedure 
@@ -45,24 +48,47 @@ traversal_path = []
 #           Add that edge to the queue/stack
 
 
-
-
 # ---------------------------------------------------
             # README Procedure 
 # ---------------------------------------------------
 # pick a random unexplored direction from the player's current room
 # travel and log that direction
+# loop
+# take shortest path to room with unexplored paths ( utilizes bft?)
 
 
 
-# TRAVERSAL TEST
-visited_rooms = set()
-player.current_room = world.starting_room
-visited_rooms.add(player.current_room)
+# ---------------------------------------------------
+            # Traversal Graph
+# ---------------------------------------------------
+# def bft():
+stack = Stack() # Create a queue/stack as appropriate
+stack.push(player.current_room.id) # Put the starting point in that
+visited_rooms = set() # Make a set to keep track of where we’ve been
+# player.current_room = world.starting_room
 
-for move in traversal_path:
-    player.travel(move)
-    visited_rooms.add(player.current_room)
+while stack.size() > 0: # While there is stuff in the queue/stack
+    curr_room = stack.pop() # Pop the first item
+    
+    if curr_room not in visited_rooms: # If not visited
+        # DO THE THING! Implement README Procedure
+        
+        exits = player.current_room.get_exits()
+        # pick a random unexplored direction from the player's current room
+        new_direction = exits[random.randint(0, len(exits) - 1)]
+        print(f"new direction / {new_direction}") # island Problem? 
+        traversal_path.append(new_direction)  # travel and log that direction
+        for move in traversal_path:
+            player.travel(new_direction)
+            visited_rooms.add(curr_room)
+        # TODO take shortest path to room with unexplored paths ( utilizes bft?)
+        # maybe convert above for loop into bft 
+
+            
+
+# for move in traversal_path:
+#     player.travel(move)
+#     visited_rooms.add(player.current_room)
 
 if len(visited_rooms) == len(room_graph):
     print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
@@ -70,17 +96,26 @@ else:
     print("TESTS FAILED: INCOMPLETE TRAVERSAL")
     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
 
+# ---------------------------------------------------
+            # Player Methods Test
+# ---------------------------------------------------
 
+# print(f"stack / {stack}")
+# print(f"player current room / {player.current_room}")
+print(f"player current room id / {player.current_room.id}")
+print(f"player current room exits / {player.current_room.get_exits()}")
+
+# bft()
 
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
