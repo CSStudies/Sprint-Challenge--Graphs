@@ -13,8 +13,8 @@ world = World()
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
-# map_file = "maps/test_loop.txt"
-map_file = "maps/test_loop_fork.txt"
+map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
@@ -78,11 +78,14 @@ while stack.size() > 0: # While there is stuff in the queue/stack
         new_direction = exits[random.randint(0, len(exits) - 1)]
         print(f"new direction / {new_direction}") # island Problem? 
         traversal_path.append(new_direction)  # travel and log that direction
+        visited_rooms.add(curr_room)
         for move in traversal_path:
-            player.travel(new_direction)
-            visited_rooms.add(curr_room)
+            player.travel(move)
+            stack.push(player.current_room.id)
+
         # TODO take shortest path to room with unexplored paths ( utilizes bft?)
         # maybe convert above for loop into bft 
+
 
             
 
