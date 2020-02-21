@@ -5,6 +5,8 @@ from world import World
 import random
 from ast import literal_eval
 
+from util import Stack, Queue
+
 # Load world
 world = World()
 
@@ -30,37 +32,72 @@ player = Player(world.starting_room)
 traversal_path = []
 traversal_graph ={}
 
-def dft_recursive(starting_vertex, visited=None):
+reverse_dir = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
-        if visited is None:
-            visited = set()
-        visited.add(starting_vertex)
-        print(f'DFT_Visited: {visited}')
-        traversal_graph[starting_vertex] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
-        for exit in player.current_room.get_exits():
-            next_id = player.current_room.get_room_in_direction(exit).id
-            traversal_graph[player.current_room.id][exit] = next_id
-            print(f'Traversal Graph: {traversal_graph}')
-            if next_id not in visited:
-                player.travel(exit)
-                dft_recursive(next_id, visited)
+# def dft_recursive(starting_vertex, visited=None):
 
+#         if visited is None:
+#             visited = set()
+#         visited.add(starting_vertex)
+#         print(f'DFT_Visited: {visited}')
+#         traversal_graph[starting_vertex] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+        
+#         for exit in player.current_room.get_exits():
+#             next_id = player.current_room.get_room_in_direction(exit).id
+#             traversal_graph[player.current_room.id][exit] = next_id
+#             print(f'Traversal Graph: {traversal_graph}')
+#             if next_id not in visited:
+#                 traversal_path.append(exit)
+#                 print(f'Path: {traversal_path}')
+#                 player.travel(exit)
+#                 dft_recursive(next_id, visited)
+#             elif next_id is None:
+#                 print(f'Go Back:{ reverse_dir[exit]}')
+#                 player.travel(reverse_dir[exit])
+#                 dft_recursive(next_id, visited)
+                
+                # Begins BFT bft(next_id, visited)
+                # q = Queue()
+                # q.enqueue(next_id)
+                # while q.size() > 0:
+                #     if next_id in traversal_graph:
 
-# def dft_recursive(self, starting_vertex, visited=None):
-#     vert = player.current_room.id
-#     edge_arr = player.current_room.get_room_in_direction()
-#     if visited is None:
-#         visited = set()
-#     visited.add(starting_vertex)
-#     print(f'DFT_Recursive: {visited}')
-#     for edge in self.get_neighbors(starting_vertex):
-#         if edge not in visited:
-#             self.dft_recursive(edge, visited)
+                #     for exit in player.current_room.get_exits():
+                #         edge = player.get_room_in_direction(exit).id
+                        
+
+def dft(starting_vertex):
+    s = Stack()
+    s.push(starting_vertex)
+    visited = set()
+    traversal_graph[starting_vertex] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+    while s.size() > 0:
+        vert = s.pop()
+        if vert not in visited:
+            print(f'current vertex: {vert}')
+            visited.add(vert)
+            print(f'visited: {visited}')
+            exit = player.current_room.get_exits()
+            traversal_path.append(exit[random.randint(0, len(exit)-1)])
+            player.travel(traversal_path[-1])
+            print(f'move to {player.current_room.id} from {traversal_path[-1]}')
+            s.push(player.current_room.id)
+
+            # for exit in player.current_room.get_exits():
+            #     next_id = player.current_room.get_room_in_direction(exit).id
+            #     traversal_graph[player.current_room.id][exit] = next_id
+            #     print(f'Traversal Graph: {traversal_graph}')
+            #     s.push(next_id)
+                # player.travel(exit)
+                # traversal_path.append(exit)
+                # print(f'Path {traversal_path}')
+
 
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
+dft(player.current_room.id)
 
 for move in traversal_path:
     player.travel(move)
@@ -87,5 +124,5 @@ else:
 #     else:
 #         print("I did not understand that command.")
 
-if __name__=="__main__":
-    dft_recursive(player.current_room.id)
+# if __name__=="__main__":
+#     dft(player.current_room.id)
