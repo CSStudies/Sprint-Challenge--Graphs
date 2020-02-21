@@ -13,8 +13,8 @@ world = World()
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-# map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+map_file = "maps/test_loop_fork.txt"
+# map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -28,8 +28,34 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = []
+traversal_graph ={}
+
+def dft_recursive(starting_vertex, visited=None):
+
+        if visited is None:
+            visited = set()
+        visited.add(starting_vertex)
+        print(f'DFT_Visited: {visited}')
+        traversal_graph[starting_vertex] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+        for exit in player.current_room.get_exits():
+            next_id = player.current_room.get_room_in_direction(exit).id
+            traversal_graph[player.current_room.id][exit] = next_id
+            print(f'Traversal Graph: {traversal_graph}')
+            if next_id not in visited:
+                player.travel(exit)
+                dft_recursive(next_id, visited)
 
 
+# def dft_recursive(self, starting_vertex, visited=None):
+#     vert = player.current_room.id
+#     edge_arr = player.current_room.get_room_in_direction()
+#     if visited is None:
+#         visited = set()
+#     visited.add(starting_vertex)
+#     print(f'DFT_Recursive: {visited}')
+#     for edge in self.get_neighbors(starting_vertex):
+#         if edge not in visited:
+#             self.dft_recursive(edge, visited)
 
 # TRAVERSAL TEST
 visited_rooms = set()
@@ -51,12 +77,15 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
+
+if __name__=="__main__":
+    dft_recursive(player.current_room.id)
