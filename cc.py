@@ -28,7 +28,11 @@ class Graph:
             self.traversal_graph[k] = room_graph[k][0]
         print(f'Traversal_graph: {self.traversal_graph}')
 
-
+        for k in self.traversal_graph: 
+            x = self.traversal_graph[k][0]
+            y = self.traversal_graph[k][1]
+            self.addEdge(x,y)
+    
 
     def DFSUtil(self, temp, v, visited): 
   
@@ -64,6 +68,7 @@ class Graph:
                 temp = [] 
                 cc.append(self.DFSUtil(temp, v, visited)) 
         return cc 
+        
   
 # Driver Code 
 if __name__=="__main__": 
@@ -74,26 +79,26 @@ if __name__=="__main__":
     
     g.buildGraph(room_graph)
 
-    g.addEdge(3,5)
-    g.addEdge(3,6) 
-    g.addEdge(3,7) 
-    g.addEdge(4,5) 
-    g.addEdge(5,5) 
-    g.addEdge(3,4) 
-    g.addEdge(3,3) 
-    g.addEdge(2,5) 
-    g.addEdge(1,5) 
-    g.addEdge(1,4) 
-    g.addEdge(1,3) 
-    g.addEdge(2,3) 
-    g.addEdge(4,6) 
-    g.addEdge(5,6) 
-    g.addEdge(5,7) 
-    g.addEdge(2,6) 
-    g.addEdge(1,6)
-    g.addEdge(1,7) 
+    # g.addEdge(3,5)
+    # g.addEdge(3,6) 
+    # g.addEdge(3,7) 
+    # g.addEdge(4,5) 
+    # g.addEdge(5,5) 
+    # g.addEdge(3,4) 
+    # g.addEdge(3,3) 
+    # g.addEdge(2,5) 
+    # g.addEdge(1,5) 
+    # g.addEdge(1,4) 
+    # g.addEdge(1,3) 
+    # g.addEdge(2,3) 
+    # g.addEdge(4,6) 
+    # g.addEdge(5,6) 
+    # g.addEdge(5,7) 
+    # g.addEdge(2,6) 
+    # g.addEdge(1,6)
+    # g.addEdge(1,7) 
     
-    cc = g.connectedComponents() 
+    # cc = g.connectedComponents() 
     print("Following are connected components") 
     print(cc) 
   
