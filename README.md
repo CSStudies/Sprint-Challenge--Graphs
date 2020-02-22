@@ -65,3 +65,6 @@ My best path is 957 moves. Can you find a shorter path?
 | **FINAL SCORE** | | **0-1** | **2** | **3** |  |
 
 
+traversal_graph[player.current_room.id] = {}
+            print(traversal_graph[player.current_room.id] )
+            traversal_graph[player.current_room.id][exit]= next_id
